@@ -1,3 +1,5 @@
+<app-missionfilter (filterChanged)="applyFilters($event)"></app-missionfilter>
+
 <div *ngFor="let mission of missions" class="card">
     <img [src]="mission.links.mission_patch_small" width="100" />
     <h3>{{ mission.mission_name }}</h3>

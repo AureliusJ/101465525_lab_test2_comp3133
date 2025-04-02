@@ -1,7 +1,4 @@
 <div>
-    <label>Filter by Launch Year:</label>
-    <input [(ngModel)]="selectedYear" placeholder="e.g. 2020" />
-    <button (click)="onYearChange()">Filter</button>
-    <button (click)="resetFilters()">Reset Filters</button>
+    <label for="year">Filter by Launch Year:</label>
+    <input type="text" id="year" (input)="onFilterChange($event)" placeholder="Enter Year">
   </div>
-  
