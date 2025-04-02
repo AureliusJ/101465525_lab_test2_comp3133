@@ -1,22 +1,42 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-missionfilter',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './missionfilter.component.html',
   styleUrls: ['./missionfilter.component.css']
 })
-export class MissionfilterComponent {
-  year: string = '';
+export class MissionfilterComponent implements OnInit {
+  @Output() filtersChanged = new EventEmitter<any>();
+  
+  selectedYear: string = '';
+  launchSuccess: boolean | null = null;
+  landSuccess: boolean | null = null;
 
-  constructor(private router: Router) {}
+  constructor() { }
 
-  filter(): void {
-    this.router.navigate(['/'], { queryParams: { year: this.year } });
+  ngOnInit(): void {
   }
 
-  reset(): void {
-    this.year = '';
-    this.router.navigate(['/']);
+  onYearChange(): void {
+    this.emitFilters();
+  }
+
+  resetFilters(): void {
+    this.selectedYear = '';
+    this.launchSuccess = null;
+    this.landSuccess = null;
+    this.emitFilters();
+  }
+
+  emitFilters(): void {
+    this.filtersChanged.emit({
+      year: this.selectedYear,
+      launch: this.launchSuccess,
+      land: this.landSuccess
+    });
   }
 }

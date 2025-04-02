@@ -7,19 +7,36 @@ import { Mission } from '../models/mission.model';
   providedIn: 'root'
 })
 export class MissionService {
-  private baseUrl = 'https://api.spacexdata.com/v3/launches';
+  private apiUrl = 'https://api.spacexdata.com/v3/launches';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getAllMissions(): Observable<Mission[]> {
-    return this.http.get<Mission[]>(this.baseUrl);
+    return this.http.get<Mission[]>(this.apiUrl);
   }
 
-  getMissionsByYear(year: string): Observable<Mission[]> {
-    return this.http.get<Mission[]>(`${this.baseUrl}?launch_year=${year}`);
+  getMissionByFlightNumber(flightNumber: number): Observable<Mission> {
+    return this.http.get<Mission>(`${this.apiUrl}/${flightNumber}`);
   }
 
-  getMissionById(id: number): Observable<Mission> {
-    return this.http.get<Mission>(`${this.baseUrl}/${id}`);
+  getFilteredMissions(filters: any): Observable<Mission[]> {
+    let url = `${this.apiUrl}?`;
+    
+    if (filters.year) {
+      url += `launch_year=${filters.year}&`;
+    }
+    
+    if (filters.launch !== null) {
+      url += `launch_success=${filters.launch}&`;
+    }
+    
+    if (filters.land !== null) {
+      url += `land_success=${filters.land}&`;
+    }
+    
+    // Remove trailing & if present
+    url = url.endsWith('&') ? url.slice(0, -1) : url;
+    
+    return this.http.get<Mission[]>(url);
   }
 }
